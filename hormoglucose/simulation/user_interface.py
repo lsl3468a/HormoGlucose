@@ -6,6 +6,7 @@ from hormoglucose.actuator.pump import InsulinPump
 from hormoglucose.patient.t1dpatient import T1DPatient
 from hormoglucose.simulation.scenario_gen import RandomScenario
 from hormoglucose.simulation.scenario import CustomScenario
+from hormoglucose.simulation.scenario_pa import CustomScenarioPA
 from hormoglucose.analysis.report import report
 import pandas as pd
 import copy
@@ -380,7 +381,8 @@ def simulate(
         patient = T1DPatient.withName(pname)
         insulin_pump = InsulinPump.withName(insulin_pump_name)
         scen = copy.deepcopy(scenario)
-        env = T1DSimEnv(patient, cgm_sensor, insulin_pump, scen)
+        scen_exe = CustomScenarioPA(start_time=scen.start_time, scenario=[])  # no exercise
+        env = T1DSimEnv(patient, cgm_sensor, insulin_pump, scen, scen_exe)
         return env
 
     envs = [local_build_env(p) for p in patient_names]

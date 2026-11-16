@@ -1,0 +1,7 @@
+numpy>=1.25
+pandas>=2.0
+scipy>=1.11
+matplotlib>=3.7
+gymnasium~=0.29.1
+pathos>=0.3.1
+setuptools<81

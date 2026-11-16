@@ -31,7 +31,7 @@ calibrated on an adult profile and are shared by all 30 virtual patients.
 ## Installation
 
 ```bash
-git clone https://github.com/<user>/HormoGlucose.git
+git clone https://github.com/lsl3468a/HormoGlucose.git
 cd HormoGlucose
 pip install -e .
 ```
@@ -98,7 +98,7 @@ equivalence tests. The tuned gains used in the paper are provided in
 
 If you use HormoGlucose, please cite:
 
-> Lasserre, L., Demongeot, J., Foug{\`e}re, C., Doncescu, A.: An Extended SimGlucose Simulator for Type 1 Diabetes: Modeling Hormonal Counterregulation and Physical Activity. In: Proceedings of the 16th International Conference on Simulation and Modeling Methodologies, Technologies and Applications (SIMULTECH 2026), pp. 171--182. SCITEPRESS (2026). \doi{10.5220/0015188600004094}
+> Lasserre, L., Demongeot, J., Fougère, C., Doncescu, A.: An Extended SimGlucose Simulator for Type 1 Diabetes: Modeling Hormonal Counterregulation and Physical Activity. In: Proceedings of the 16th International Conference on Simulation and Modeling Methodologies, Technologies and Applications (SIMULTECH 2026), pp. 171--182. SCITEPRESS (2026). \doi{10.5220/0015188600004094}
 
 and the original simulator:
 

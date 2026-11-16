@@ -3,12 +3,13 @@ from hormoglucose.patient.t1dpatient import T1DPatient
 from hormoglucose.sensor.cgm import CGMSensor
 from hormoglucose.actuator.pump import InsulinPump
 from hormoglucose.simulation.scenario_gen import RandomScenario
+from hormoglucose.simulation.scenario_pa import CustomScenarioPA
 from hormoglucose.controller.base import Action
 import numpy as np
 import pkg_resources
-import gymnasium as gym 
-from gym import spaces
-from gym.utils import seeding
+import gymnasium as gym
+from gymnasium import spaces
+from gymnasium.utils import seeding
 from datetime import datetime
 import gymnasium
 
@@ -71,11 +72,9 @@ class T1DSimEnv(gym.Env):
         # Derive a random seed. This gets passed as a uint, but gets
         # checked as an int elsewhere, so we need to keep it below
         # 2**31.
-        seed2 = seeding.hash_seed(self.np_random.randint(0, 1000)) % 2**31
-        seed3 = seeding.hash_seed(seed2 + 1) % 2**31
-        seed4 = seeding.hash_seed(seed3 + 1) % 2**31
+        seed2, seed3, seed4 = (int(x) for x in self.np_random.integers(0, 2**31, size=3))
 
-        hour = self.np_random.randint(low=0.0, high=24.0)
+        hour = int(self.np_random.integers(0, 24))
         start_time = datetime(2018, 1, 1, hour, 0, 0)
 
         if isinstance(self.patient_name, list):
@@ -99,7 +98,7 @@ class T1DSimEnv(gym.Env):
             scenario_exe = self.np_random.choice(self.custom_scenario_exe)
         else:
             scenario_exe = (
-                RandomScenario(start_time=start_time, seed=seed3)
+                CustomScenarioPA(start_time=start_time, scenario=[])  # no exercise
                 if self.custom_scenario_exe is None
                 else self.custom_scenario_exe
             )
@@ -113,8 +112,23 @@ class T1DSimEnv(gym.Env):
         self.env.render(close=close)
 
     def _close(self):
-        super()._close()
         self.env._close_viewer()
+
+    # public API (the methods above follow the legacy gym<0.9 convention)
+    def step(self, action):
+        return self._step(action)
+
+    def reset(self):
+        return self._reset()
+
+    def seed(self, seed=None):
+        return self._seed(seed)
+
+    def render(self, mode="human", close=False):
+        return self._render(mode=mode, close=close)
+
+    def close(self):
+        return self._close()
 
     @property
     def action_space(self):
@@ -160,6 +174,7 @@ class T1DSimGymnaisumEnv(gymnasium.Env):
         )
 
     def step(self, action):
+        action = float(np.asarray(action, dtype=float).ravel()[0])  # Box(1,) -> U/min
         obs, reward, done, info = self.env.step(action)
         # Truncated will be controlled by TimeLimit wrapper when registering the env.
         # For example,

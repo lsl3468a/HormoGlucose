@@ -54,10 +54,11 @@ TUNE_SEEDS = [101, 102, 103]         # scénarios de RÉGLAGE
 # "CGM" = mesure bruitée du capteur, celle que voit le contrôleur.
 SIGNAL = "BG"
 
-# Grille : ordres de grandeur, ~3 points par décade, échelle logarithmique
-P_GRID = np.logspace(-5, -3, 7)                              # 7 valeurs
-I_GRID = np.concatenate([[0.0], np.logspace(-7, -5, 5)])     # 6 valeurs
-D_GRID = np.concatenate([[0.0], np.logspace(-4, -2, 5)])     # 6 valeurs -> 252
+# Grille v2 : ordres de grandeur, échelle logarithmique, étendue après la v1
+# (optimum sur P min et D max). P = I = D = 0 redonne exactement le BBC.
+P_GRID = np.concatenate([[0.0], np.logspace(-6, -3, 10)])    # 11 valeurs
+I_GRID = np.concatenate([[0.0], np.logspace(-8, -5, 7)])     #  8 valeurs
+D_GRID = np.concatenate([[0.0], np.logspace(-4, -1, 7)])     #  8 valeurs -> 704
 
 
 # ---------------------------------------------------------------------------
